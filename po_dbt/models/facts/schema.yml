@@ -1,0 +1,152 @@
+version: 2
+
+models:
+  - name: fct_sessions
+    description: >
+      Fact model representing user sessions, enriched with attributes
+      from the user and device Slowly Changing Dimensions (SCDs) that were
+      valid at the start time of the session. Materialized incrementally.
+
+    columns:
+      - name: session_id
+        description: "Unique identifier for the session."
+        tests:
+          - not_null
+          - unique
+
+      - name: user_id
+        description: "Identifier for the user associated with the session."
+        tests:
+          - not_null
+
+      - name: device_id
+        description: "Identifier for the device associated with the session."
+        tests:
+          - not_null
+
+      - name: session_start_ts
+        description: "Timestamp of the first event in the session."
+        tests:
+          - not_null
+
+      - name: session_end_ts
+        description: "Timestamp of the last event in the session."
+        tests:
+          - not_null
+
+      - name: session_length_seconds
+        description: "Duration of the session in seconds."
+        tests:
+          - not_null
+
+      - name: event_count
+        description: "Total number of events within the session."
+        tests:
+          - not_null
+
+      - name: platform
+        description: >
+          Platform of the device for this session.
+          Prioritizes the value from stg_sessions, falls back to the device SCD.
+
+      - name: app_version
+        description: >
+          App version for this session.
+          Prioritizes the value from stg_sessions, falls back to the device SCD.
+
+      - name: os_version
+        description: >
+          OS version for this session.
+          Prioritizes the value from stg_sessions, falls back to the device SCD.
+
+      - name: country
+        description: >
+          Country for this session.
+          Prioritizes the value from stg_sessions, falls back to the user dimension.
+
+      - name: language
+        description: >
+          Language for this session.
+          Prioritizes the value from stg_sessions, falls back to the user dimension.
+
+      - name: territory
+        description: >
+          Territory for this session.
+          Prioritizes the value from stg_sessions, falls back to the user dimension.
+
+      - name: event_ids
+        description: "Array of all event_ids included in this session."
+
+  - name: fct_events
+    description: >
+      Fact model representing individual events, enriched with attributes
+      from the session they belong to and the device attributes valid at the time of the event.
+      Materialized incrementally.
+
+    columns:
+      - name: event_timestamp
+        description: "Timestamp when the event occurred."
+        tests:
+          - not_null
+
+      - name: event_name
+        description: "Name of the event."
+        tests:
+          - not_null
+
+      - name: event_id
+        description: "Unique identifier for the event."
+        tests:
+          - not_null
+          - unique
+
+      - name: user_id
+        description: >
+          Identifier for the user associated with the event.
+          Prioritizes the user_id from stg_events, falls back to the session's user_id.
+
+      - name: device_id
+        description: >
+          Identifier for the device associated with the event.
+          Prioritizes the device_id from stg_events, falls back to the session's device_id.
+        tests:
+          - not_null
+
+      - name: event_properties
+        description: "Raw JSON payload of event properties from the source."
+
+      - name: platform
+        description: >
+          Platform of the device for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: app_version
+        description: >
+          App version for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: os_version
+        description: >
+          OS version for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: country
+        description: >
+          Country for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: language
+        description: >
+          Language for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: territory
+        description: >
+          Territory for this event.
+          Prioritizes the value from the session, falls back to the device SCD, then stg_events.
+
+      - name: session_id
+        description: "Unique identifier of the session this event belongs to (if matched)."
+
+      - name: event_source
+        description: "Source of the event."

@@ -1,0 +1,277 @@
+version: 2
+
+models:
+  - name: stg_events
+    description: >
+      Staging model for raw analytics events data.
+      Performs initial cleaning, type casting, and deduplication
+      from the `analytics_events_table` source.
+
+    columns:
+      - name: event_timestamp
+        description: "Timestamp when the event occurred (converted from milliseconds)."
+        tests:
+          - not_null
+
+      - name: event_name
+        description: "Name of the event."
+        tests:
+          - not_null
+
+      - name: event_id
+        description: >
+          Unique identifier for the event.
+          Generated using the source event_id or a hash of the raw data if event_id is missing.
+        tests:
+          - not_null
+          - unique
+
+      - name: user_id
+        description: "Identifier for the user associated with the event (cleaned of whitespace/empty strings)."
+
+      - name: device_id
+        description: "Identifier for the device associated with the event (cleaned of whitespace/empty strings)."
+
+      - name: platform
+        description: "Platform of the device (e.g., 'ios', 'android') (cleaned of whitespace/empty strings)."
+
+      - name: app_version
+        description: "Version of the application at the time of the event (cleaned of whitespace/empty strings)."
+
+      - name: os_version
+        description: "Operating system version of the device (cleaned of whitespace/empty strings)."
+
+      - name: country
+        description: "Country derived from the event properties (cleaned of whitespace/empty strings)."
+
+      - name: language
+        description: "Language setting of the device (cleaned of whitespace/empty strings)."
+
+      - name: device_manufacturer
+        description: "Manufacturer of the device (cleaned of whitespace/empty strings)."
+
+      - name: device_model
+        description: "Model of the device (cleaned of whitespace/empty strings)."
+
+      - name: adid
+        description: >
+          Android Advertising ID (GAID).
+          Specific blocked/unavailable values ('', '00000000-0000-0000-0000-000000000000', '0000-0000')
+          are replaced with 'TRACKING_BLOCKED'.
+
+      - name: idfa
+        description: >
+          iOS Identifier for Advertisers (IDFA).
+          Specific blocked/unavailable values ('', '00000000-0000-0000-0000-000000000000', '0000-0000')
+          are replaced with 'TRACKING_BLOCKED'.
+
+      - name: idfv
+        description: "iOS Identifier for Vendors (IDFV) (cleaned of whitespace/empty strings)."
+
+      - name: territory
+        description: >
+          Territory associated with the event, derived from event properties.
+          Includes specific logic for 'ftue_step' = 'territory'.
+
+      - name: event_properties
+        description: "Raw JSON payload of event properties."
+
+      - name: event_source
+        description: "Source of the event, derived from joining with the `events_source` model."
+        tests:
+          - not_null
+
+  - name: stg_sessions
+    description: >
+      Staging model that sessionizes frontend events from `stg_events`.
+      It groups events into sessions based on a timeout period and stitched user identity,
+      and calculates session-level metrics and attributes.
+
+    columns:
+      - name: session_id
+        description: "Unique identifier for the session, generated from session key and start timestamp."
+        tests:
+          - not_null
+          - unique
+
+      - name: user_id
+        description: >
+          The stitched user identifier for the session.
+          Derived from the user_id on the first event in the session,
+          or the first user_id ever seen on the device if the event user_id is null.
+
+      - name: device_id
+        description: "Identifier for the device associated with the session."
+        tests:
+          - not_null
+
+      - name: session_start_ts
+        description: "Timestamp of the first event in the session."
+        tests:
+          - not_null
+
+      - name: session_end_ts
+        description: "Timestamp of the last event in the session."
+        tests:
+          - not_null
+
+      - name: session_length_seconds
+        description: "Duration of the session in seconds."
+        tests:
+          - not_null
+
+      - name: event_count
+        description: "Total number of events within the session."
+        tests:
+          - not_null
+
+      - name: platform
+        description: "Platform of the device for this session (from the first event)."
+
+      - name: app_version
+        description: "App version for this session (from the first event)."
+
+      - name: os_version
+        description: "OS version for this session (from the first event)."
+
+      - name: device_manufacturer
+        description: "Device manufacturer for this session (from the first event)."
+
+      - name: device_model
+        description: "Device model for this session (from the first event)."
+
+      - name: adid
+        description: >
+          Android Advertising ID (GAID) for this session (from the first event).
+          Blocked/unavailable values are replaced with 'TRACKING_BLOCKED'.
+
+      - name: idfa
+        description: >
+          iOS Identifier for Advertisers (IDFA) for this session (from the first event).
+          Blocked/unavailable values are replaced with 'TRACKING_BLOCKED'.
+
+      - name: idfv
+        description: "iOS Identifier for Vendors (IDFV) for this session (from the first event)."
+
+      - name: country
+        description: "Country for this session (from the first event)."
+
+      - name: language
+        description: "Language for this session (from the first event)."
+
+      - name: territory
+        description: "Territory for this session (from the first event)."
+
+      - name: event_ids
+        description: "Array of all event_ids included in this session."
+
+  - name: stg_attribution
+    description: >
+      Staging model combining raw organic and paid install data from AppsFlyer reports.
+      Performs initial cleaning, type casting, standardization, and deduplication.
+
+    columns:
+      - name: installtime
+        description: "Timestamp when the app was installed (converted from integer timestamp)."
+        tests:
+          - not_null
+
+      - name: mediasource
+        description: "Media source name (e.g., 'organic', 'GoogleAds', 'Facebook Ads')."
+        tests:
+          - not_null
+
+      - name: channel
+        description: "Marketing channel."
+
+      - name: campaign
+        description: "Campaign name."
+
+      - name: adset
+        description: "Ad set name."
+
+      - name: ad
+        description: "Ad name."
+
+      - name: adtype
+        description: "Type of ad."
+
+      - name: appsflyerid
+        description: "Unique AppsFlyer ID."
+        tests:
+          - not_null # Assuming appsflyerid is always present for an install
+
+      - name: advertisingid
+        description: "Google Advertising ID (GAID)."
+
+      - name: idfa
+        description: "Apple Identifier for Advertisers (IDFA)."
+
+      - name: idfv
+        description: "iOS Identifier for Vendors (IDFV)."
+
+      - name: platform
+        description: "Platform (e.g., 'android', 'ios') (standardized to lowercase)."
+        tests:
+          - not_null
+
+      - name: extraction_date
+        description: "Timestamp when the data was extracted from the source."
+        tests:
+          - not_null
+
+      - name: unique_id
+        description: >
+          A unique identifier for the install record,
+          generated by hashing key attribution fields. Used for deduplication.
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_devices
+    description: >
+      Staging model that creates a unique list of device attribute combinations
+      observed in the session data, along with the earliest timestamp each combination was seen.
+      Note: This model aggregates data and does not track changes in attributes over time for a single device.
+
+    columns:
+      - name: device_id
+        description: "Unique identifier for the device."
+        tests:
+          - not_null 
+
+
+      - name: platform
+        description: "Platform of the device (e.g., 'ios', 'android'). Filtered to exclude nulls."
+
+
+      - name: app_version
+        description: "Version of the application. Filtered to exclude nulls."
+
+      - name: os_version
+        description: "Operating system version of the device. Filtered to exclude nulls."
+
+
+      - name: device_manufacturer
+        description: "Manufacturer of the device."
+
+      - name: device_model
+        description: "Model of the device."
+
+      - name: adid
+        description: >
+          Android Advertising ID (GAID).
+          Note: Specific blocked/unavailable values may be present depending on upstream transformations.
+
+      - name: idfa
+        description: >
+          iOS Identifier for Advertisers (IDFA).
+          Note: Specific blocked/unavailable values may be present depending on upstream transformations.
+
+      - name: idfv
+        description: "iOS Identifier for Vendors (IDFV)."
+
+      - name: first_touch_timestamp
+        description: "The earliest timestamp a session was recorded for this specific combination of device attributes."
+        tests:
+          - not_null

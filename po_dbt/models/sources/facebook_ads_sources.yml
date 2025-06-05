@@ -1,0 +1,135 @@
+version: 2
+
+sources:
+  - name: facebook_ads
+    description: "Raw data source from the advertising platform."
+    database: po-analytics-production 
+    schema: source_facebook_ads 
+
+    tables:
+      - name: AdInsights
+        description: "Table containing performance metrics and breakdowns for ads from the advertising platform."
+
+        columns:
+          - name: Target
+            description: "The targeting criteria or audience for the ad."
+          - name: DatePreset
+            description: "Predefined date range for the report (e.g., 'last_7_days')."
+          - name: DateStart
+            description: "Start date of the reporting period."
+          - name: DateEnd
+            description: "End date of the reporting period."
+          - name: TimeIncrement
+            description: "The aggregation period for the data (e.g., 'daily', 'all_days')."
+          - name: Level
+            description: "The granularity level of the report (e.g., 'ad', 'campaign', 'adset', 'account')."
+          - name: AccountCurrency
+            description: "Currency of the ad account."
+          - name: ActionAttributionWindows
+            description: "Action attribution windows used for conversions (often a JSON string)."
+          - name: AdAccountId
+            description: "Unique identifier for the ad account."
+          - name: AdAccountName
+            description: "Name of the ad account."
+          - name: CampaignId
+            description: "Unique identifier for the campaign."
+          - name: CampaignName
+            description: "Name of the campaign."
+          - name: AdSetId
+            description: "Unique identifier for the ad set."
+          - name: AdSetName
+            description: "Name of the ad set."
+          - name: AdId
+            description: "Unique identifier for the ad."
+          - name: AdName
+            description: "Name of the ad."
+          - name: BuyingType
+            description: "The buying type for the ad (e.g., 'AUCTION', 'FIXED_PRICE')."
+          - name: Clicks
+            description: "Total number of clicks on the ad."
+          - name: ConversionRateRanking
+            description: "Ranking of the ad's conversion rate compared to ads targeting the same audience."
+          - name: CostPerEstimatedAdRecallers
+            description: "Cost per estimated ad recaller."
+          - name: CostPerInlineLinkClick
+            description: "Cost per inline link click."
+          - name: CostPerInlinePostEngagement
+            description: "Cost per inline post engagement."
+          - name: CostPerUniqueClick
+            description: "Cost per unique click."
+          - name: CostPerUniqueInlineLinkClick
+            description: "Cost per unique inline link click."
+          - name: CPC
+            description: "Cost per click (CPC)."
+          - name: CPM
+            description: "Cost per mille (cost per 1000 impressions)."
+          - name: CPP
+            description: "Cost per point (CPP), often related to reach or Target Rating Points (TRPs)."
+          - name: CTR
+            description: "Click-through rate (CTR), as a decimal (e.g., 0.02 for 2%)."
+          - name: EstimatedAdRecallRate
+            description: "Estimated ad recall rate, as a decimal."
+          - name: EstimatedAdRecallers
+            description: "Estimated number of people who will recall seeing the ad."
+          - name: Frequency
+            description: "Average number of times each person saw the ad."
+          - name: Impressions
+            description: "Total number of times the ad was shown."
+          - name: InlineLinkClicks
+            description: "Number of clicks on links within the ad that lead to a destination."
+          - name: InlineLinkClicksCounter
+            description: "Counter for inline link clicks, possibly a raw or specific type of count."
+          - name: InlinePostEngagement
+            description: "Number of engagements (e.g., likes, comments, shares) with the ad post."
+          - name: InstantExperienceClicksToOpen
+            description: "Number of clicks that opened an Instant Experience."
+          - name: InstantExperienceClicksToStart
+            description: "Number of clicks that started an Instant Experience after it was opened."
+          - name: InstantExperienceOutboundClicks
+            description: "Number of clicks on outbound links within an Instant Experience."
+          - name: Objective
+            description: "The objective of the campaign (e.g., 'CONVERSIONS', 'LINK_CLICKS')."
+          - name: QualityRanking
+            description: "Ranking of the ad's perceived quality compared to ads targeting the same audience."
+          - name: Reach
+            description: "Number of unique people who saw the ad."
+          - name: Spend
+            description: "Total amount spent on the ad during the reporting period."
+          - name: UniqueClicks
+            description: "Number of unique people who clicked the ad."
+          - name: UniqueCTR
+            description: "Unique click-through rate (Unique Clicks / Reach), as a decimal."
+          - name: UniqueInlineLinkClicks
+            description: "Number of unique people who clicked on inline links."
+          - name: UniqueInlineLinkClickCounter
+            description: "Counter for unique inline link clicks."
+          - name: UniqueLinkClicksCounter
+            description: "Counter for unique link clicks."
+          - name: Checkins
+            description: "Number of check-ins to a physical location attributed to the ad."
+          - name: EventResponses
+            description: "Number of responses to an event attributed to the ad."
+          - name: LinkClicks
+            description: "Total number of clicks on links in the ad (can be broader than inline clicks)."
+          - name: OfferSaves
+            description: "Number of times an offer promoted by the ad was saved."
+          - name: OutboundClicks
+            description: "Number of clicks leading people off the platform."
+          - name: PageEngagements
+            description: "Total engagement with the Facebook Page attributed to the ad."
+          - name: PageLikes
+            description: "Number of likes on the Facebook Page attributed to the ad."
+          - name: PageMentions
+            description: "Number of mentions of the Facebook Page attributed to the ad."
+          - name: PagePhotoViews
+            description: "Number of views of photos on the Facebook Page attributed to the ad."
+          - name: PostComments
+            description: "Number of comments on the ad post."
+          - name: PostEngagements
+            description: "Total number of engagements on the ad post."
+          - name: PostShares
+            description: "Number of shares of the ad post."
+          - name: PostReactions
+            description: "Number of reactions (e.g., like, love, haha) on the ad post."
+          - name: PageTabViews
+            description: "Number of views of tabs on the Facebook Page attributed to the ad."

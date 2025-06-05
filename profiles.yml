@@ -1,0 +1,13 @@
+po_dbt:
+  outputs:
+    dev:
+      dataset: dev
+      job_execution_timeout_seconds: 600
+      job_retries: 1
+      location: EU
+      method: oauth
+      priority: interactive
+      project: po-analytics-non-production
+      threads: 16
+      type: bigquery
+  target: dev

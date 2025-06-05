@@ -1,0 +1,407 @@
+version: 2
+
+sources:
+  - name: appsflyer # Name of the source (can be referenced in models)
+    database: po-analytics-non-production # Your BigQuery Project ID
+    schema: source_appsflyer # Your BigQuery Dataset ID
+
+    tables:
+      - name: raw_organic_installs_report # The exact table name in BigQuery
+        description: "Raw data from the AppsFlyer Organic Installs Report."
+
+        columns:
+          - name: adsetid
+            data_type: STRING
+            description: "Ad set ID."
+          - name: ad
+            data_type: STRING
+            description: "Ad name."
+          - name: adid
+            data_type: STRING
+            description: "Ad ID."
+          - name: adtype
+            data_type: STRING
+            description: "Type of ad."
+          - name: siteid
+            data_type: STRING
+            description: "Site ID."
+          - name: subsiteid
+            data_type: STRING
+            description: "Sub-site ID."
+          - name: subparam1
+            data_type: STRING
+            description: "Custom sub-parameter 1."
+          - name: subparam2
+            data_type: STRING
+            description: "Custom sub-parameter 2."
+          - name: subparam3
+            data_type: STRING
+            description: "Custom sub-parameter 3."
+          - name: subparam4
+            data_type: STRING
+            description: "Custom sub-parameter 4."
+          - name: subparam5
+            data_type: STRING
+            description: "Custom sub-parameter 5."
+          - name: costmodel
+            data_type: STRING
+            description: "Cost model (e.g., CPA, CPI)."
+          - name: costvalue
+            data_type: STRING # Consider casting to NUMERIC or BIGNUMERIC later
+            description: "Cost value."
+          - name: costcurrency
+            data_type: STRING
+            description: "Currency of the cost."
+          - name: contributor1partner
+            data_type: STRING
+            description: "Partner name for the first contributing touchpoint."
+          - name: contributor1mediasource
+            data_type: STRING
+            description: "Media source for the first contributing touchpoint."
+          - name: contributor1campaign
+            data_type: STRING
+            description: "Campaign name for the first contributing touchpoint."
+          - name: contributor1touchtype
+            data_type: STRING
+            description: "Touchpoint type for the first contributing touchpoint."
+          - name: contributor1touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the first contributing touchpoint."
+          - name: contributor2partner
+            data_type: STRING
+            description: "Partner name for the second contributing touchpoint."
+          - name: contributor2mediasource
+            data_type: STRING
+            description: "Media source for the second contributing touchpoint."
+          - name: contributor2campaign
+            data_type: STRING
+            description: "Campaign name for the second contributing touchpoint."
+          - name: contributor2touchtype
+            data_type: STRING
+            description: "Touchpoint type for the second contributing touchpoint."
+          - name: contributor2touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the second contributing touchpoint."
+          - name: contributor3partner
+            data_type: STRING
+            description: "Partner name for the third contributing touchpoint."
+          - name: contributor3mediasource
+            data_type: STRING
+            description: "Media source for the third contributing touchpoint."
+          - name: contributor3campaign
+            data_type: STRING
+            description: "Campaign name for the third contributing touchpoint."
+          - name: contributor3touchtype
+            data_type: STRING
+            description: "Touchpoint type for the third contributing touchpoint."
+          - name: contributor3touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the third contributing touchpoint."
+          - name: region
+            data_type: STRING
+            description: "User's region."
+          - name: countrycode
+            data_type: STRING
+            description: "User's country code."
+          - name: state
+            data_type: STRING
+            description: "User's state."
+          - name: city
+            data_type: STRING
+            description: "User's city."
+          - name: postalcode
+            data_type: STRING
+            description: "User's postal code."
+          - name: dma
+            data_type: STRING
+            description: "Designated Market Area."
+          - name: ip
+            data_type: STRING
+            description: "User's IP address."
+          - name: wifi
+            data_type: STRING # Consider casting to BOOLEAN later
+            description: "Indicates if the user was on WiFi."
+          - name: operator
+            data_type: STRING
+            description: "Mobile operator."
+          - name: carrier
+            data_type: STRING
+            description: "Mobile carrier."
+          - name: language
+            data_type: STRING
+            description: "User's device language."
+          - name: appsflyerid
+            data_type: STRING
+            description: "Unique AppsFlyer ID."
+          - name: advertisingid
+            data_type: STRING
+            description: "Google Advertising ID (GAID)."
+          - name: idfa
+            data_type: STRING
+            description: "Apple Identifier for Advertisers (IDFA)."
+          - name: androidid
+            data_type: STRING
+            description: "Android ID."
+          - name: customeruserid
+            data_type: STRING
+            description: "Your internal user ID."
+          - name: imei
+            data_type: STRING
+            description: "International Mobile Equipment Identity."
+          - name: idfv
+            data_type: STRING
+            description: "Identifier for Vendors (IDFV)."
+          - name: platform
+            data_type: STRING
+            description: "Platform (e.g., Android, iOS)."
+          - name: devicetype
+            data_type: STRING
+            description: "Device type (e.g., mobile, tablet)."
+          - name: osversion
+            data_type: STRING
+            description: "Operating System version."
+          - name: appversion
+            data_type: STRING
+            description: "App version."
+          - name: sdkversion
+            data_type: STRING
+            description: "AppsFlyer SDK version."
+          - name: appid
+            data_type: STRING
+            description: "App ID."
+          - name: appname
+            data_type: STRING
+            description: "App name."
+          - name: bundleid
+            data_type: STRING
+            description: "Bundle ID."
+          - name: isretargeting
+            data_type: STRING # Consider casting to BOOLEAN later
+            description: "Indicates if the install was a retargeting conversion."
+          - name: retargetingconversiontype
+            data_type: STRING
+            description: "Type of retargeting conversion."
+          - name: attributionlookback
+            data_type: STRING # Consider casting to INTEGER later
+            description: "Attribution lookback window in hours."
+          - name: reengagementwindow
+            data_type: STRING # Consider casting to INTEGER later
+            description: "Re-engagement window in hours."
+          - name: isprimaryattribution
+            data_type: STRING # Consider casting to BOOLEAN later
+            description: "Indicates if this is the primary attribution touchpoint."
+          - name: useragent
+            data_type: STRING
+            description: "User agent string."
+          - name: httpreferrer
+            data_type: STRING
+            description: "HTTP referrer URL."
+          - name: originalurl
+            data_type: STRING
+            description: "Original click URL."
+          - name: placement
+            data_type: STRING
+            description: "Ad placement."
+          - name: adunit
+            data_type: STRING
+            description: "Ad unit."
+          - name: extraction_date
+            data_type: TIMESTAMP
+            description: "Timestamp when the data was extracted."
+            # You might add a not_null test here
+            # tests:
+            #   - not_null
+
+      - name: raw_installs_report2 # The exact table name in BigQuery
+        description: "Raw data from the AppsFlyer Installs Report v2."
+
+        columns:
+          - name: attributedtouchtype
+            data_type: STRING
+            description: "Type of touchpoint attributed to the install (e.g., click, impression)."
+          - name: attributedtouchtime
+            data_type: STRING # Consider casting to TIMESTAMP later in staging
+            description: "Timestamp of the attributed touchpoint."
+          - name: installtime
+            data_type: STRING # Consider casting to TIMESTAMP later in staging
+            description: "Timestamp when the app was installed."
+          - name: eventtime
+            data_type: STRING # Consider casting to TIMESTAMP later in staging
+            description: "Timestamp of the in-app event."
+          - name: eventname
+            data_type: STRING
+            description: "Name of the in-app event."
+          - name: eventvalue
+            data_type: STRING # Often JSON or string representation of event parameters
+            description: "Value associated with the event, often a JSON string."
+          - name: eventrevenue
+            data_type: STRING # Consider casting to NUMERIC or BIGNUMERIC later
+            description: "Revenue generated by the event."
+          - name: eventrevenuecurrency
+            data_type: STRING
+            description: "Currency of the event revenue."
+          - name: eventrevenueusd
+            data_type: STRING # Consider casting to NUMERIC or BIGNUMERIC later
+            description: "Event revenue converted to USD."
+          - name: eventsource
+            data_type: STRING
+            description: "Source of the event (e.g., SDK, S2S)."
+          - name: isreceiptvalidated
+            data_type: STRING # Consider casting to BOOLEAN later
+            description: "Indicates if the purchase receipt was validated."
+          - name: partner
+            data_type: STRING
+            description: "Partner name associated with the touchpoint."
+          - name: mediasource
+            data_type: STRING
+            description: "Media source name (e.g., GoogleAds, Facebook Ads)."
+          - name: channel
+            data_type: STRING
+            description: "Marketing channel."
+          - name: keywords
+            data_type: STRING
+            description: "Keywords associated with the touchpoint."
+          - name: campaign
+            data_type: STRING
+            description: "Campaign name."
+          - name: campaignid
+            data_type: STRING
+            description: "Campaign ID."
+          - name: adset
+            data_type: STRING
+            description: "Ad set name."
+          - name: adsetid
+            data_type: STRING
+            description: "Ad set ID."
+          - name: ad
+            data_type: STRING
+            description: "Ad name."
+          - name: adid
+            data_type: STRING
+            description: "Ad ID."
+          - name: adtype
+            data_type: STRING
+            description: "Type of ad."
+          - name: siteid
+            data_type: STRING
+            description: "Site ID."
+          - name: subsiteid
+            data_type: STRING
+            description: "Sub-site ID."
+          - name: subparam1
+            data_type: STRING
+            description: "Custom sub-parameter 1."
+          - name: subparam2
+            data_type: STRING
+            description: "Custom sub-parameter 2."
+          - name: subparam3
+            data_type: STRING
+            description: "Custom sub-parameter 3."
+          - name: subparam4
+            data_type: STRING
+            description: "Custom sub-parameter 4."
+          - name: subparam5
+            data_type: STRING
+            description: "Custom sub-parameter 5."
+          - name: costmodel
+            data_type: STRING
+            description: "Cost model (e.g., CPA, CPI)."
+          - name: costvalue
+            data_type: STRING # Consider casting to NUMERIC or BIGNUMERIC later
+            description: "Cost value."
+          - name: costcurrency
+            data_type: STRING
+            description: "Currency of the cost."
+          - name: contributor1partner
+            data_type: STRING
+            description: "Partner name for the first contributing touchpoint."
+          - name: contributor1mediasource
+            data_type: STRING
+            description: "Media source for the first contributing touchpoint."
+          - name: contributor1campaign
+            data_type: STRING
+            description: "Campaign name for the first contributing touchpoint."
+          - name: contributor1touchtype
+            data_type: STRING
+            description: "Touchpoint type for the first contributing touchpoint."
+          - name: contributor1touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the first contributing touchpoint."
+          - name: contributor2partner
+            data_type: STRING
+            description: "Partner name for the second contributing touchpoint."
+          - name: contributor2mediasource
+            data_type: STRING
+            description: "Media source for the second contributing touchpoint."
+          - name: contributor2campaign
+            data_type: STRING
+            description: "Campaign name for the second contributing touchpoint."
+          - name: contributor2touchtype
+            data_type: STRING
+            description: "Touchpoint type for the second contributing touchpoint."
+          - name: contributor2touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the second contributing touchpoint."
+          - name: contributor3partner
+            data_type: STRING
+            description: "Partner name for the third contributing touchpoint."
+          - name: contributor3mediasource
+            data_type: STRING
+            description: "Media source for the third contributing touchpoint."
+          - name: contributor3campaign
+            data_type: STRING
+            description: "Campaign name for the third contributing touchpoint."
+          - name: contributor3touchtype
+            data_type: STRING
+            description: "Touchpoint type for the third contributing touchpoint."
+          - name: contributor3touchtime
+            data_type: STRING # Consider casting to TIMESTAMP later
+            description: "Touchpoint timestamp for the third contributing touchpoint."
+          - name: region
+            data_type: STRING
+            description: "User's region."
+          - name: countrycode
+            data_type: STRING
+            description: "User's country code."
+          - name: state
+            data_type: STRING
+            description: "User's state."
+          - name: city
+            data_type: STRING
+            description: "User's city."
+          - name: postalcode
+            data_type: STRING
+            description: "User's postal code."
+          - name: dma
+            data_type: STRING
+            description: "Designated Market Area."
+          - name: ip
+            data_type: STRING
+            description: "User's IP address."
+          - name: wifi
+            data_type: STRING # Consider casting to BOOLEAN later
+            description: "Indicates if the user was on WiFi."
+          - name: operator
+            data_type: STRING
+            description: "Mobile operator."
+          - name: carrier
+            data_type: STRING
+            description: "Mobile carrier."
+          - name: language
+            data_type: STRING
+            description: "User's device language."
+          - name: appsflyerid
+            data_type: STRING
+            description: "Unique AppsFlyer ID."
+          - name: advertisingid
+            data_type: STRING
+            description: "Google Advertising ID (GAID)."
+          - name: idfa
+            data_type: STRING
+            description: "Apple Identifier for Advertisers (IDFA)."
+          - name: androidid
+            data_type: STRING
+            description: "Android ID."
+          - name: customeruserid
+            data_type: STRING
+            description: "Your internal user ID."

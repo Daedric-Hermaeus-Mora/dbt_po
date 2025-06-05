@@ -1,0 +1,37 @@
+{{
+    config(
+        materialized='table',
+        tags=['analytics']
+    )
+}}
+
+with user_events as (
+    select
+        user_id,
+        event_timestamp,
+        event_id
+    from {{ ref('stg_events') }}
+    where user_id is not null
+),
+
+user_activity as (
+    select
+        user_id,
+        min(event_timestamp) as first_seen_at,
+        max(event_timestamp) as last_seen_at,
+        count(distinct date(event_timestamp)) as days_active,
+        count(distinct event_id) as total_events,
+        date_diff(max(event_timestamp), min(event_timestamp), day) as days_since_first_seen,
+        date_diff(current_timestamp(), max(event_timestamp), day) as days_since_last_seen
+    from user_events
+    group by 1
+)
+
+select
+    ua.*,
+    du.platform,
+    du.app_version,
+    du.country,
+    du.language
+from user_activity ua
+left join {{ ref('dim_users') }} du using (user_id) 

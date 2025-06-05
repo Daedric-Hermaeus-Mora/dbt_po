@@ -1,0 +1,44 @@
+version: 2
+
+sources:
+  - name: analytics_events # Logical name for this source
+    database: po-analytics-production # Your BigQuery Project ID
+    schema: analytics_events # Your BigQuery Dataset ID
+
+    tables:
+      - name: analytics_events_table # The exact table name in BigQuery
+        description: "Raw analytics events data, partitioned by publish_time."
+        # Note: Partitioning is defined on the table in BigQuery, not in the dbt source YAML,
+        # but documenting it here is helpful.
+
+        columns:
+          - name: publish_time
+            data_type: TIMESTAMP
+            description: "Timestamp when the event was published. This field is REQUIRED and the table is partitioned by it."
+            tests:
+               - not_null
+
+          - name: subscription_name
+            data_type: STRING
+            description: "Name of the subscription the event belongs to. This field is REQUIRED."
+            # tests:
+            #   - not_null
+
+          - name: message_id
+            data_type: NUMERIC
+            description: "Unique identifier for the message/event. This field is REQUIRED."
+            # tests:
+            #   - not_null
+            #   - unique # Consider adding a unique test if message_id should be unique
+
+          - name: attributes
+            data_type: JSON
+            description: "JSON payload containing event attributes. This field is REQUIRED."
+            # tests:
+            #   - not_null
+
+          - name: data
+            data_type: JSON
+            description: "JSON payload containing the main event data. This field is REQUIRED."
+            # tests:
+            #   - not_null

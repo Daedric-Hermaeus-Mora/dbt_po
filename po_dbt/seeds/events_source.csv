@@ -1,0 +1,36 @@
+event_name,event_source
+Visual Customization Item Used,frontend
+User Challenged,frontend
+Tutorial Step Reached,frontend
+Trophies Won,backend
+Trophies Lost,backend
+Show Started,frontend
+Show Completed,frontend
+Show Activity Completed,frontend
+Show Abandoned,frontend
+Session Started,frontend
+Screen View,frontend
+Registration Step Completed,frontend
+Registration Started,frontend
+Registration Completed,frontend
+Referral Code Used,frontend
+Prize Won,backend
+Low FPS Detected,frontend
+Level Updated,frontend
+Leaderboard Updated,backend
+Items Used,frontend
+IAP Product Purchased,frontend
+General Action Performed,frontend
+Game Round Started,frontend
+Game Round Completed,frontend
+Game Round Abandoned,frontend
+Game Product Purchased,frontend
+Friend Removed,backend
+Friend Added,backend
+FTUE Step Configured,frontend
+Error Encountered,frontend
+Chat Used,frontend
+App Rating Submitted,frontend
+App Rating Popup Shown,frontend
+App Opened,frontend
+Account Deleted,frontend

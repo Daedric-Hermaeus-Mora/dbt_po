@@ -1,0 +1,33 @@
+version: 2
+
+# Documentation for dbt macros
+
+macros:
+  - name: get_date_range
+    description: >
+      Generates a dictionary containing a start date ('from') and an end date ('to').
+      Useful for defining date ranges in queries, especially for incremental models or date-based filters.
+    arguments:
+      - name: from
+        description: "The start date for the range (expected format 'YYYY-MM-DD'). Defaults to yesterday."
+        type: string
+      - name: to
+        description: "The end date for the range (expected format 'YYYY-MM-DD'). Defaults to today."
+        type: string
+
+  - name: get_first_value
+    description: >
+      Calculates the first non-null value of a specified column within a window,
+      ordered by another column. Commonly used in aggregation queries to pick
+      the attribute value from the first event or record in a group.
+      Uses a BigQuery-specific ARRAY_AGG pattern.
+    arguments:
+      - name: value_column
+        description: "The name of the column from which to get the first value."
+        type: string
+      - name: order_by_column
+        description: "The name of the column used to order the records within the window."
+        type: string
+      - name: order_direction
+        description: "The direction of the order ('ASC' or 'DESC'). Defaults to 'ASC'."
+        type: string

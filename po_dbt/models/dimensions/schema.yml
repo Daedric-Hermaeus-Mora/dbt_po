@@ -1,0 +1,144 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: >
+      Dimension model representing users, derived from session data and joined with attribution information.
+      Aggregates session data to the user level and attempts to join with attribution records.
+      Uses a custom incremental merge logic.
+      Note: The identity stitching logic is based on user_id and device_id.
+      Note: Attribution join logic attempts to match based on device/attribution IDs.
+
+    columns:
+      - name: user_id
+        description: >
+          Unique identifier for the user.
+          Derived from session user_id, or a transient ID based on device_id if user_id is null.
+        tests:
+          - not_null
+          # - unique # Add unique test if the model is intended to have one row per user_id
+
+      - name: first_touch_timestamp
+        description: "The earliest session start timestamp observed for this user identity."
+        tests:
+          - not_null
+
+      - name: last_touch_timestamp
+        description: "The latest session end timestamp observed for this user identity."
+        tests:
+          - not_null
+
+      - name: device_id
+        description: "Device ID associated with the first session for this user identity."
+
+      - name: platform
+        description: "Platform associated with the first session for this user identity."
+
+      - name: app_version
+        description: "App version associated with the first session for this user identity."
+
+      - name: os_version
+        description: "OS version associated with the first session for this user identity."
+
+      - name: device_manufacturer
+        description: "Device manufacturer associated with the first session for this user identity."
+
+      - name: device_model
+        description: "Device model associated with the first session for this user identity."
+
+      - name: adid
+        description: >
+          Android Advertising ID (GAID) associated with the first session for this user identity.
+          Blocked/unavailable values may be present.
+
+      - name: idfa
+        description: >
+          iOS Identifier for Advertisers (IDFA) associated with the first session for this user identity.
+          Blocked/unavailable values may be present.
+
+      - name: idfv
+        description: "iOS Identifier for Vendors (IDFV) associated with the first session for this user identity."
+
+      - name: country
+        description: "Country associated with the first session for this user identity."
+
+      - name: language
+        description: "Language associated with the first session for this user identity."
+
+      - name: territory
+        description: "Territory associated with the first session for this user identity."
+
+      - name: mediasource
+        description: >
+          Media source from a matching attribution record.
+          Note: Join logic matches based on device/attribution IDs and platform.
+
+      - name: channel
+        description: "Channel from a matching attribution record."
+
+      - name: campaign
+        description: "Campaign from a matching attribution record."
+
+      - name: adset
+        description: "Ad set from a matching attribution record."
+
+      - name: ad
+        description: "Ad name from a matching attribution record."
+
+      - name: adtype
+        description: "Ad type from a matching attribution record."
+
+      - name: mmp_install_time # Renamed from installtime to avoid conflict and clarify source
+        description: "Install timestamp from a matching attribution record."
+
+  - name: dim_devices_scd
+    description: >
+      Attempt to build a Slowly Changing Dimension (SCD) Type 2 model for devices
+      to track changes in platform, app_version, and os_version.
+      Note: This model uses an aggregation of stg_devices as its source,
+      which is not suitable for accurate SCD Type 2 tracking.
+      The incremental logic is custom and may not correctly manage validity periods.
+
+    columns:
+      - name: id
+        description: >
+          Generated unique identifier for a specific state (combination of attributes) of a device.
+          Used as the unique key for incremental merge.
+        tests:
+          - not_null
+          - unique
+
+      - name: device_id
+        description: "Unique identifier for the device."
+        tests:
+          - not_null
+
+      - name: platform
+        description: "Platform of the device."
+        tests:
+          - not_null # Based on source filtering
+
+      - name: app_version
+        description: "Version of the application."
+        tests:
+          - not_null # Based on source filtering
+
+      - name: os_version
+        description: "Operating system version of the device."
+        tests:
+          - not_null # Based on source filtering
+
+      - name: valid_from
+        description: >
+          The start timestamp of the validity period for this device attribute state.
+          Derived from the minimum first_touch_timestamp for this attribute combination.
+          Note: This may not accurately reflect the true start of the state's validity.
+        tests:
+          - not_null
+
+      - name: valid_to
+        description: >
+          The end timestamp of the validity period for this device attribute state.
+          Calculated based on the valid_from of the next state for the same device.
+          Null or a fixed future date for the current state.
+          Note: Calculation may be inaccurate due to issues with source data and incremental logic.
